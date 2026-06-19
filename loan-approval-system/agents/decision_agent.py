@@ -20,10 +20,10 @@ from mcp_servers.decision_synthesis import (
 #client = Anthropic(api_key=ANTHROPIC_API_KEY)
 
 llm = ChatAnthropic(
-    model=AGENT_MODELS["<agent_name>"],      # e.g., "profile_agent"
+    model=AGENT_MODELS["decision_agent"],      # e.g., "profile_agent"
     api_key=LLMGW_API_KEY,
     base_url=LLMGW_BASE_URL,                 # Routes through LLMGW gateway
-    max_tokens=MAX_TOKENS["<agent_name>"],
+    max_tokens=MAX_TOKENS["decision_agent"],
     temperature=0
 )
 
