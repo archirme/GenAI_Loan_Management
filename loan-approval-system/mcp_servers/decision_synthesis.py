@@ -2,14 +2,17 @@
 MCP Server: DecisionSynthesis
 Provides decision rules, precedents, and logging.
 Used by: Loan Decision Agent
+
+CHANGE: log_decision now persists to MySQL when DATA_SOURCE = "mysql"
 """
 from fastmcp import FastMCP
 import json
 from datetime import datetime
+from config import DATA_SOURCE  # <-- NEW IMPORT
 
 mcp = FastMCP("DecisionSynthesis")
 
-# Decision rules
+# Decision rules — UNCHANGED
 DECISION_MATRIX = {
     "auto_approve": {
         "conditions": {
@@ -36,7 +39,7 @@ DECISION_MATRIX = {
     }
 }
 
-# Historical decision precedents
+# Historical decision precedents — UNCHANGED
 DECISION_PRECEDENTS = [
     {
         "case_id": "HIST001",
@@ -64,7 +67,7 @@ DECISION_PRECEDENTS = [
     },
 ]
 
-# Decision log storage
+# In-memory decision log — UNCHANGED
 decision_log = []
 
 
@@ -81,9 +84,10 @@ def get_decision_precedents(credit_score_range: str = "all") -> list:
 
 
 @mcp.tool()
-def log_decision(applicant_id: str, classification: str, risk_score: float, 
+def log_decision(applicant_id: str, classification: str, risk_score: float,
                  confidence: float, factors: list, explanation: str) -> dict:
     """Log a loan decision for audit trail."""
+    decision_id = f"DEC-{applicant_id}-{datetime.utcnow().strftime('%Y%m%d%H%M%S')}"
     record = {
         "applicant_id": applicant_id,
         "classification": classification,
@@ -92,10 +96,28 @@ def log_decision(applicant_id: str, classification: str, risk_score: float,
         "key_factors": factors,
         "explanation": explanation,
         "timestamp": datetime.utcnow().isoformat(),
-        "decision_id": f"DEC-{applicant_id}-{datetime.utcnow().strftime('%Y%m%d%H%M%S')}"
+        "decision_id": decision_id
     }
+
+    # Always keep in-memory log (existing behavior)
     decision_log.append(record)
-    return {"status": "logged", "decision_id": record["decision_id"]}
+
+    # --- NEW: Also persist to MySQL if enabled ---
+    if DATA_SOURCE == "mysql":
+        from database.db_connection import execute_query
+        try:
+            execute_query(
+                """INSERT INTO decision_log
+                   (decision_id, applicant_id, classification, risk_score, confidence, key_factors, explanation)
+                   VALUES (%s, %s, %s, %s, %s, %s, %s)""",
+                (decision_id, applicant_id, classification, risk_score,
+                 confidence, json.dumps(factors), explanation)
+            )
+        except Exception as e:
+            print(f"[WARNING] Failed to log decision to MySQL: {e}")
+    # --- END NEW ---
+
+    return {"status": "logged", "decision_id": decision_id}
 
 
 if __name__ == "__main__":

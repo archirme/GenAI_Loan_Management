@@ -1,0 +1,64 @@
+# Git
+.git
+.gitignore
+.gitattributes
+
+# Python
+__pycache__
+*.pyc
+*.pyo
+*.pyd
+.Python
+pip-log.txt
+pip-delete-this-directory.txt
+.tox/
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+*.egg-info/
+dist/
+build/
+
+# Virtual environments
+csvenv/
+venv/
+env/
+ENV/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# OS
+Thumbs.db
+.DS_Store
+
+# Testing
+.pytest_cache/
+.mypy_cache/
+
+# Logs
+*.log
+/tmp/
+
+# Environment files
+.env.local
+.env.*.local
+
+# Node modules (if any frontend)
+node_modules/
+
+# Docker
+docker-compose.override.yml
+Dockerfile.dev
+
+# Misc
+*.md
+README.md

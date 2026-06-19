@@ -1,0 +1,6 @@
+Collecting mysql-connector-python
+  Downloading mysql_connector_python-9.7.0-cp312-cp312-manylinux_2_28_x86_64.whl.metadata (11 kB)
+Downloading mysql_connector_python-9.7.0-cp312-cp312-manylinux_2_28_x86_64.whl (21.7 MB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 21.7/21.7 MB 56.4 MB/s eta 0:00:00
+Installing collected packages: mysql-connector-python
+Successfully installed mysql-connector-python-9.7.0

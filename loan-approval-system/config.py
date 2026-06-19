@@ -96,3 +96,21 @@ MCP_SERVERS = {
 # FastAPI Service
 FASTAPI_HOST = "localhost"
 FASTAPI_PORT = 8000
+
+
+# ============================================================
+# NEW: DATA SOURCE CONFIGURATION
+# ============================================================
+
+# Toggle between "mock" (in-memory data) and "mysql" (real database)
+# Change this in .env to switch without modifying any code
+DATA_SOURCE = os.getenv("DATA_SOURCE", "mock")  # "mock" or "mysql"
+
+# MySQL Configuration (used only when DATA_SOURCE = "mysql")
+MYSQL_CONFIG = {
+    "host": os.getenv("DB_HOST", "localhost"),
+    "port": int(os.getenv("DB_PORT", 3306)),
+    "user": os.getenv("DB_USER", "root"),
+    "password": os.getenv("DB_PASSWORD", ""),
+    "database": os.getenv("DB_NAME", "loan_approval_db"),
+}

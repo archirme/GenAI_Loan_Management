@@ -4,6 +4,7 @@ Provides applicant profile data and credit history information.
 Used by: Applicant Profile Agent
 """
 from fastmcp import FastMCP
+from config import DATA_SOURCE  # <-- NEW IMPORT
 
 mcp = FastMCP("ApplicantDB")
 
@@ -71,46 +72,101 @@ CREDIT_HISTORY = {
     },
 }
 
+# ============================================================
+# NEW: MySQL HELPER FUNCTIONS
+# ============================================================
+
+def _get_applicant_from_db(applicant_id: str) -> dict:
+    """Fetch applicant from MySQL database."""
+    from database.db_connection import execute_query
+    row = execute_query(
+        "SELECT * FROM applicants WHERE applicant_id = %s",
+        (applicant_id,),
+        fetch_one=True
+    )
+    if row:
+        data = dict(row)
+        data.pop("applicant_id", None)
+        if data.get("income"):
+            data["income"] = float(data["income"])
+        data = {k: v for k, v in data.items() if v is not None}
+        return data
+    return None
+
+
+def _get_credit_from_db(applicant_id: str) -> dict:
+    """Fetch credit history from MySQL database."""
+    from database.db_connection import execute_query
+    row = execute_query(
+        "SELECT * FROM credit_history WHERE applicant_id = %s",
+        (applicant_id,),
+        fetch_one=True
+    )
+    if row:
+        data = dict(row)
+        data.pop("applicant_id", None)
+        if data.get("credit_utilization"):
+            data["credit_utilization"] = float(data["credit_utilization"])
+        if "defaults_count" in data:
+            data["defaults"] = data.pop("defaults_count")
+        return data
+    return None
+
+
+# ============================================================
+# MCP TOOLS — MODIFIED (if/else on DATA_SOURCE)
+# ============================================================
 
 @mcp.tool()
 def get_applicant_profile(applicant_id: str) -> dict:
     """Fetch applicant profile details from the database."""
-    if applicant_id in APPLICANT_DATABASE:
-        return {
-            "status": "found",
-            "data": APPLICANT_DATABASE[applicant_id]
-        }
-    return {
-        "status": "not_found",
-        "data": None,
-        "message": f"Applicant {applicant_id} not found in database"
-    }
+
+    if DATA_SOURCE == "mysql":  # <-- NEW BRANCH
+        data = _get_applicant_from_db(applicant_id)
+        if data:
+            return {"status": "found", "data": data, "source": "mysql"}
+        return {"status": "not_found", "data": None,
+                "message": f"Applicant {applicant_id} not found in MySQL database",
+                "source": "mysql"}
+
+    else:  # mock — EXISTING LOGIC (unchanged)
+        if applicant_id in APPLICANT_DATABASE:
+            return {"status": "found", "data": APPLICANT_DATABASE[applicant_id], "source": "mock"}
+        return {"status": "not_found", "data": None,
+                "message": f"Applicant {applicant_id} not found in database",
+                "source": "mock"}
 
 
 @mcp.tool()
 def get_credit_history(applicant_id: str) -> dict:
     """Fetch credit history and score for an applicant."""
-    if applicant_id in CREDIT_HISTORY:
-        return {
-            "status": "found",
-            "data": CREDIT_HISTORY[applicant_id]
-        }
-    return {
-        "status": "not_found",
-        "data": None,
-        "message": f"Credit history for {applicant_id} not found"
-    }
+
+    if DATA_SOURCE == "mysql":  # <-- NEW BRANCH
+        data = _get_credit_from_db(applicant_id)
+        if data:
+            return {"status": "found", "data": data, "source": "mysql"}
+        return {"status": "not_found", "data": None,
+                "message": f"Credit history for {applicant_id} not found in MySQL",
+                "source": "mysql"}
+
+    else:  # mock — EXISTING LOGIC (unchanged)
+        if applicant_id in CREDIT_HISTORY:
+            return {"status": "found", "data": CREDIT_HISTORY[applicant_id], "source": "mock"}
+        return {"status": "not_found", "data": None,
+                "message": f"Credit history for {applicant_id} not found",
+                "source": "mock"}
 
 
 @mcp.tool()
 def check_application_completeness(applicant_data: dict) -> dict:
     """Validate if all required fields are present in the application."""
+    # UNCHANGED — pure validation logic
     required_fields = ["applicant_id", "age", "income", "employment_type",
                        "credit_score", "loan_amount", "loan_tenure",
                        "existing_liabilities", "location"]
-    
+
     missing_fields = [f for f in required_fields if f not in applicant_data or applicant_data[f] is None]
-    
+
     return {
         "is_complete": len(missing_fields) == 0,
         "missing_fields": missing_fields,

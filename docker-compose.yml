@@ -1,0 +1,143 @@
+version: '3.8'
+
+services:
+  fastapi:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: loan-approval-fastapi
+    command: python -m fastapi_service.main
+    ports:
+      - "8000:8000"
+    environment:
+      PYTHONUNBUFFERED: "1"
+      PYTHONDONTWRITEBYTECODE: "1"
+      LLMGW_API_KEY: ${LLMGW_API_KEY}
+      LLMGW_BASE_URL: ${LLMGW_BASE_URL}
+      LLMGW_MODEL: ${LLMGW_MODEL}
+      DATA_SOURCE: ${DATA_SOURCE:-mock}
+      DB_HOST: mysql
+      DB_PORT: "3306"
+      DB_USER: ${DB_USER:-root}
+      DB_PASSWORD: ${DB_PASSWORD:-Tek@12345}
+      DB_NAME: ${DB_NAME:-loan_approval_db}
+    depends_on:
+      mysql:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 20s
+    networks:
+      - loan-network
+    restart: unless-stopped
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+  streamlit:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: loan-approval-streamlit
+    command: streamlit run streamlit_app/app.py --server.port=8501 --logger.level=warning
+    ports:
+      - "8501:8501"
+    environment:
+      PYTHONUNBUFFERED: "1"
+      PYTHONDONTWRITEBYTECODE: "1"
+      LLMGW_API_KEY: ${LLMGW_API_KEY}
+      LLMGW_BASE_URL: ${LLMGW_BASE_URL}
+      LLMGW_MODEL: ${LLMGW_MODEL}
+      DATA_SOURCE: ${DATA_SOURCE:-mock}
+      DB_HOST: mysql
+      DB_PORT: "3306"
+      DB_USER: ${DB_USER:-root}
+      DB_PASSWORD: ${DB_PASSWORD:-Tek@12345}
+      DB_NAME: ${DB_NAME:-loan_approval_db}
+      STREAMLIT_SERVER_HEADLESS: "true"
+      STREAMLIT_SERVER_MAXUPLOADSIZE: "200"
+    depends_on:
+      mysql:
+        condition: service_healthy
+    networks:
+      - loan-network
+    restart: unless-stopped
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+  orchestrator:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: loan-approval-orchestrator
+    command: python -m orchestrator.graph
+    environment:
+      PYTHONUNBUFFERED: "1"
+      PYTHONDONTWRITEBYTECODE: "1"
+      LLMGW_API_KEY: ${LLMGW_API_KEY}
+      LLMGW_BASE_URL: ${LLMGW_BASE_URL}
+      LLMGW_MODEL: ${LLMGW_MODEL}
+      DATA_SOURCE: ${DATA_SOURCE:-mock}
+      DB_HOST: mysql
+      DB_PORT: "3306"
+      DB_USER: ${DB_USER:-root}
+      DB_PASSWORD: ${DB_PASSWORD:-Tek@12345}
+      DB_NAME: ${DB_NAME:-loan_approval_db}
+    depends_on:
+      mysql:
+        condition: service_healthy
+    networks:
+      - loan-network
+    restart: unless-stopped
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+  mysql:
+    image: mysql:8.0
+    container_name: loan-approval-mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD:-Tek@12345}
+      MYSQL_DATABASE: ${DB_NAME:-loan_approval_db}
+      MYSQL_USER: ${DB_USER:-root}
+      MYSQL_PASSWORD: ${DB_PASSWORD:-Tek@12345}
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql:ro
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-p${DB_PASSWORD:-Tek@12345}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+    networks:
+      - loan-network
+    restart: unless-stopped
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+volumes:
+  mysql_data:
+    driver: local
+
+networks:
+  loan-network:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.20.0.0/16
