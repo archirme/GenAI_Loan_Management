@@ -93,7 +93,7 @@ Return your analysis as JSON."""
         SystemMessage(content=SYSTEM_PROMPT),
         HumanMessage(content=user_message)
     ])
-    
+
     # Parse response
     response_text = response.content.strip()
     
