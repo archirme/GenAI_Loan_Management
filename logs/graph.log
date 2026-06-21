@@ -1,0 +1,57 @@
+[INFO    ] [2026-06-21 01:00:49,236] [orchestrator.graph] - [APP002] Loan approval workflow starting
+[INFO    ] [2026-06-21 01:01:14,190] [orchestrator.graph] - [APP0002] Loan approval workflow starting
+[INFO    ] [2026-06-21 01:01:30,383] [orchestrator.graph] - [APP0001] Loan approval workflow starting
+[INFO    ] [2026-06-21 01:01:48,126] [orchestrator.graph] - [APP003] Loan approval workflow starting
+[INFO    ] [2026-06-21 01:02:15,796] [orchestrator.graph] - [APP005] Loan approval workflow starting
+[INFO    ] [2026-06-21 01:11:30,330] [orchestrator.graph] - [APP] Loan approval workflow starting
+[INFO    ] [2026-06-21 09:04:32,534] [orchestrator.graph] - [APP] Loan approval workflow starting
+[INFO    ] [2026-06-21 09:16:12,389] [orchestrator.graph] - [APP] Loan approval workflow starting
+[INFO    ] [2026-06-21 09:16:46,426] [orchestrator.graph] - [APP001] Loan approval workflow starting
+[INFO    ] [2026-06-21 09:19:10,721] [orchestrator.graph] - [APP001] Loan approval workflow starting
+[INFO    ] [2026-06-21 09:19:10,786] [orchestrator.graph] - [APP001] Profile Agent (Haiku) - Starting profile analysis
+[INFO    ] [2026-06-21 09:19:13,621] [orchestrator.graph] - [APP001] Profile Agent completed successfully
+[INFO    ] [2026-06-21 09:19:13,622] [orchestrator.graph] - [APP001] Risk Agent (Sonnet) - Starting risk analysis
+[INFO    ] [2026-06-21 09:19:28,375] [orchestrator.graph] - [APP001] Risk Agent completed successfully
+[INFO    ] [2026-06-21 09:19:28,376] [orchestrator.graph] - [APP001] Decision Agent (Sonnet) - Making decision
+[INFO    ] [2026-06-21 09:19:40,662] [orchestrator.graph] - [APP001] Decision Agent completed: APPROVED
+[INFO    ] [2026-06-21 09:19:40,664] [orchestrator.graph] - [APP001] Compliance Agent (Haiku) - Processing compliance
+[INFO    ] [2026-06-21 09:19:44,961] [orchestrator.graph] - [APP001] Compliance Agent completed: Loan application APP001 approved for ₹500,000 over 60-month tenure. Approval letter generated, disbursement process initiated, applicant notified, credit bureau update scheduled, and loan account created in compliance with regulatory standards.
+[INFO    ] [2026-06-21 09:19:44,962] [orchestrator.graph] - [APP001] Aggregating workflow results
+[INFO    ] [2026-06-21 09:19:44,962] [orchestrator.graph] - [APP001] Workflow completed successfully
+[INFO    ] [2026-06-21 09:19:44,962] [orchestrator.graph] - [APP001] Loan approval workflow completed with decision: APPROVED
+[INFO    ] [2026-06-21 09:37:07,328] [orchestrator.graph] - [APP1782014827] Loan approval workflow starting
+[INFO    ] [2026-06-21 09:37:07,370] [orchestrator.graph] - [APP1782014827] Profile Agent (Haiku) - Starting profile analysis
+[INFO    ] [2026-06-21 09:37:09,938] [orchestrator.graph] - [APP1782014827] Profile Agent completed successfully
+[INFO    ] [2026-06-21 09:37:09,939] [orchestrator.graph] - [APP1782014827] Risk Agent (Sonnet) - Starting risk analysis
+[INFO    ] [2026-06-21 09:37:25,415] [orchestrator.graph] - [APP1782014827] Risk Agent completed successfully
+[INFO    ] [2026-06-21 09:37:25,416] [orchestrator.graph] - [APP1782014827] Decision Agent (Sonnet) - Making decision
+[INFO    ] [2026-06-21 09:37:39,023] [orchestrator.graph] - [APP1782014827] Decision Agent completed: MANUAL_REVIEW
+[INFO    ] [2026-06-21 09:37:39,024] [orchestrator.graph] - [APP1782014827] Compliance Agent (Haiku) - Processing compliance
+[INFO    ] [2026-06-21 09:37:43,602] [orchestrator.graph] - [APP1782014827] Compliance Agent completed: Loan application assigned to senior loan officer for manual review. Applicant requested to submit supporting documentation including recent salary slips, Form 16/ITR filings, employment confirmation letter, and credit bureau report within 72-hour SLA for verification and processing.
+[INFO    ] [2026-06-21 09:37:43,603] [orchestrator.graph] - [APP1782014827] Aggregating workflow results
+[INFO    ] [2026-06-21 09:37:43,603] [orchestrator.graph] - [APP1782014827] Workflow completed successfully
+[INFO    ] [2026-06-21 09:37:43,604] [orchestrator.graph] - [APP1782014827] Loan approval workflow completed with decision: MANUAL_REVIEW
+[INFO    ] [2026-06-21 09:52:18,805] [orchestrator.graph] - [APP1782015738] Loan approval workflow starting
+[INFO    ] [2026-06-21 09:52:18,839] [orchestrator.graph] - [APP1782015738] Profile Agent (Haiku) - Starting profile analysis
+[INFO    ] [2026-06-21 09:52:22,148] [orchestrator.graph] - [APP1782015738] Profile Agent completed successfully
+[INFO    ] [2026-06-21 09:52:22,151] [orchestrator.graph] - [APP1782015738] Risk Agent (Sonnet) - Starting risk analysis
+[INFO    ] [2026-06-21 09:52:37,931] [orchestrator.graph] - [APP1782015738] Risk Agent completed successfully
+[INFO    ] [2026-06-21 09:52:37,932] [orchestrator.graph] - [APP1782015738] Decision Agent (Sonnet) - Making decision
+[INFO    ] [2026-06-21 09:52:49,276] [orchestrator.graph] - [APP1782015738] Decision Agent completed: MANUAL_REVIEW
+[INFO    ] [2026-06-21 09:52:49,277] [orchestrator.graph] - [APP1782015738] Compliance Agent (Haiku) - Processing compliance
+[INFO    ] [2026-06-21 09:52:53,272] [orchestrator.graph] - [APP1782015738] Compliance Agent completed: Loan application assigned to senior loan officer for manual underwriting review. Case flagged for priority processing with 72-hour SLA. Applicant notified of review status. Additional documentation requested: employment verification letter, formal credit bureau report, and salaried income classification validation.
+[INFO    ] [2026-06-21 09:52:53,273] [orchestrator.graph] - [APP1782015738] Aggregating workflow results
+[INFO    ] [2026-06-21 09:52:53,274] [orchestrator.graph] - [APP1782015738] Workflow completed successfully
+[INFO    ] [2026-06-21 09:52:53,274] [orchestrator.graph] - [APP1782015738] Loan approval workflow completed with decision: MANUAL_REVIEW
+[INFO    ] [2026-06-21 10:00:39,740] [orchestrator.graph] - [APP] Loan approval workflow starting
+[INFO    ] [2026-06-21 10:00:39,763] [orchestrator.graph] - [APP] Profile Agent (Haiku) - Starting profile analysis
+[INFO    ] [2026-06-21 10:00:42,179] [orchestrator.graph] - [APP] Profile Agent completed successfully
+[INFO    ] [2026-06-21 10:00:42,180] [orchestrator.graph] - [APP] Risk Agent (Sonnet) - Starting risk analysis
+[INFO    ] [2026-06-21 10:00:56,899] [orchestrator.graph] - [APP] Risk Agent completed successfully
+[INFO    ] [2026-06-21 10:00:56,900] [orchestrator.graph] - [APP] Decision Agent (Sonnet) - Making decision
+[INFO    ] [2026-06-21 10:01:08,978] [orchestrator.graph] - [APP] Decision Agent completed: APPROVED
+[INFO    ] [2026-06-21 10:01:08,980] [orchestrator.graph] - [APP] Compliance Agent (Haiku) - Processing compliance
+[INFO    ] [2026-06-21 10:01:13,202] [orchestrator.graph] - [APP] Compliance Agent completed: Loan application APPROVED and processed for disbursement. Approval letter generated, loan account created, credit bureau notification initiated, and disbursement process commenced within SLA of 24 hours.
+[INFO    ] [2026-06-21 10:01:13,203] [orchestrator.graph] - [APP] Aggregating workflow results
+[INFO    ] [2026-06-21 10:01:13,204] [orchestrator.graph] - [APP] Workflow completed successfully
+[INFO    ] [2026-06-21 10:01:13,204] [orchestrator.graph] - [APP] Loan approval workflow completed with decision: APPROVED

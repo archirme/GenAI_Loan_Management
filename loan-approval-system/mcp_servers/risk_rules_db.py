@@ -1,10 +1,13 @@
 """
-MCP Server: RiskRulesDB
+MCP Server: RiskRulesDB with Input Validation
 Provides risk assessment rules and thresholds.
 Used by: Financial Risk Analysis Agent
 """
 from fastmcp import FastMCP
+from logging_config import get_logger
+from exceptions import ValidationError
 
+logger = get_logger(__name__)
 mcp = FastMCP("RiskRulesDB")
 
 # Risk rules configuration
@@ -62,13 +65,35 @@ def get_credit_score_risk_level(credit_score: int) -> dict:
 
 @mcp.tool()
 def calculate_dti_ratio(monthly_income: float, existing_liabilities: float, proposed_emi: float) -> dict:
-    """Calculate Debt-to-Income ratio."""
+    """Calculate Debt-to-Income ratio with input validation."""
+    # Validate inputs
+    if not isinstance(monthly_income, (int, float)):
+        logger.error(f"DTI validation failed: monthly_income must be numeric, got {type(monthly_income)}")
+        raise ValidationError("Monthly income must be a number", field="monthly_income", value=monthly_income)
+
+    if not isinstance(existing_liabilities, (int, float)):
+        logger.error(f"DTI validation failed: existing_liabilities must be numeric")
+        raise ValidationError("Existing liabilities must be a number", field="existing_liabilities")
+
+    if not isinstance(proposed_emi, (int, float)):
+        logger.error(f"DTI validation failed: proposed_emi must be numeric")
+        raise ValidationError("Proposed EMI must be a number", field="proposed_emi")
+
     if monthly_income <= 0:
-        return {"error": "Invalid income", "dti_ratio": None}
-    
+        logger.error(f"DTI validation failed: monthly_income must be positive, got {monthly_income}")
+        raise ValidationError("Monthly income must be positive", field="monthly_income", value=monthly_income)
+
+    if existing_liabilities < 0:
+        logger.error(f"DTI validation failed: existing_liabilities cannot be negative")
+        raise ValidationError("Existing liabilities cannot be negative", field="existing_liabilities")
+
+    if proposed_emi < 0:
+        logger.error(f"DTI validation failed: proposed_emi cannot be negative")
+        raise ValidationError("Proposed EMI cannot be negative", field="proposed_emi")
+
     total_debt = existing_liabilities + proposed_emi
     dti_ratio = round(total_debt / monthly_income, 4)
-    
+
     if dti_ratio <= 0.35:
         risk_level = "LOW"
     elif dti_ratio <= 0.45:
@@ -77,7 +102,9 @@ def calculate_dti_ratio(monthly_income: float, existing_liabilities: float, prop
         risk_level = "HIGH"
     else:
         risk_level = "CRITICAL"
-    
+
+    logger.debug(f"DTI calculated: income={monthly_income}, debt={total_debt}, ratio={dti_ratio}, level={risk_level}")
+
     return {
         "dti_ratio": dti_ratio,
         "total_monthly_debt": total_debt,
@@ -88,14 +115,24 @@ def calculate_dti_ratio(monthly_income: float, existing_liabilities: float, prop
 
 @mcp.tool()
 def detect_anomalies(applicant_data: dict) -> dict:
-    """Detect anomalies in the application data."""
+    """Detect anomalies in the application data with validation."""
+    # Validate input
+    if not isinstance(applicant_data, dict):
+        logger.error(f"Anomaly detection failed: applicant_data must be dict, got {type(applicant_data)}")
+        raise ValidationError("Applicant data must be a dictionary", field="applicant_data")
+
     anomalies = []
-    
+
     income = applicant_data.get("income", 0)
     loan_amount = applicant_data.get("loan_amount", 0)
     age = applicant_data.get("age", 0)
     credit_score = applicant_data.get("credit_score", 0)
-    
+
+    # Validate numeric fields
+    if not all(isinstance(x, (int, float)) for x in [income, loan_amount, age, credit_score]):
+        logger.error("Anomaly detection: non-numeric fields found")
+        raise ValidationError("Age, income, loan_amount, and credit_score must be numeric")
+
     # Check income-loan ratio
     if income > 0 and loan_amount / income > 25:
         anomalies.append({
@@ -103,7 +140,7 @@ def detect_anomalies(applicant_data: dict) -> dict:
             "severity": "HIGH",
             "detail": f"Loan amount is {loan_amount/income:.1f}x monthly income"
         })
-    
+
     # Check age risk
     if age < 23 or age > 55:
         anomalies.append({
@@ -111,7 +148,7 @@ def detect_anomalies(applicant_data: dict) -> dict:
             "severity": "MEDIUM",
             "detail": f"Applicant age {age} is outside optimal range (23-55)"
         })
-    
+
     # Check credit score vs loan amount mismatch
     if credit_score < 650 and loan_amount > income * 10:
         anomalies.append({
@@ -119,7 +156,9 @@ def detect_anomalies(applicant_data: dict) -> dict:
             "severity": "HIGH",
             "detail": "Low credit score with high loan amount request"
         })
-    
+
+    logger.debug(f"Anomaly detection complete: found {len(anomalies)} anomalies")
+
     return {
         "anomalies_found": len(anomalies) > 0,
         "count": len(anomalies),

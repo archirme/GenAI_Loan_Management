@@ -50,7 +50,7 @@ async def health_check():
 async def process_loan_application(application: LoanApplicationRequest):
     """
     Process a loan application through the multi-agent AI system.
-    
+
     Flow: Validate → Orchestrate (4 agents) → Return Decision
     """
     try:
@@ -58,10 +58,16 @@ async def process_loan_application(application: LoanApplicationRequest):
         applicant_data = application.model_dump()
         if not applicant_data.get("timestamp"):
             applicant_data["timestamp"] = datetime.utcnow().isoformat()
-        
+
+        import logging
+        logger = logging.getLogger(__name__)
+        logger.info(f"Processing loan application: {applicant_data.get('applicant_id')}")
+
         # Run the LangGraph orchestrator
         result = run_loan_approval(applicant_data)
-        
+
+        logger.info(f"Application processed successfully: {result.get('decision')}")
+
         # Return structured response
         return LoanDecisionResponse(
             applicant_id=result.get("applicant_id", application.applicant_id),
@@ -75,11 +81,19 @@ async def process_loan_application(application: LoanApplicationRequest):
             summary=result.get("summary", ""),
             agent_details=result.get("agent_details")
         )
-        
+
     except Exception as e:
+        import logging
+        logger = logging.getLogger(__name__)
+        logger.error(f"Error processing application: {str(e)}", exc_info=True)
+
+        error_msg = str(e)
+        if len(error_msg) > 200:
+            error_msg = error_msg[:200] + "..."
+
         raise HTTPException(
             status_code=500,
-            detail=f"Error processing loan application: {str(e)}"
+            detail=f"Error processing loan application: {error_msg}"
         )
 
 

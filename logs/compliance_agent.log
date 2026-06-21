@@ -1,0 +1,21 @@
+[INFO    ] [2026-06-21 09:09:35,883] [agents.compliance_agent] - [APP001] Compliance Agent starting compliance processing for APPROVED
+[INFO    ] [2026-06-21 09:09:39,718] [agents.compliance_agent] - [APP001] Extracted JSON from markdown code block
+[INFO    ] [2026-06-21 09:09:39,720] [agents.compliance_agent] - [APP001] Compliance Agent processing complete. Case: CASE-APP001-20260621033935
+[INFO    ] [2026-06-21 09:16:36,696] [agents.compliance_agent] - [APP001] Compliance Agent starting compliance processing for APPROVED
+[INFO    ] [2026-06-21 09:16:41,177] [agents.compliance_agent] - [APP001] Extracted JSON from markdown code block
+[INFO    ] [2026-06-21 09:16:41,177] [agents.compliance_agent] - [APP001] Compliance Agent processing complete. Case: CASE-APP001-20260621034636
+[INFO    ] [2026-06-21 09:19:40,664] [agents.compliance_agent] - [APP001] Compliance Agent starting compliance processing for APPROVED
+[INFO    ] [2026-06-21 09:19:44,960] [agents.compliance_agent] - [APP001] Extracted JSON from markdown code block
+[INFO    ] [2026-06-21 09:19:44,960] [agents.compliance_agent] - [APP001] Compliance Agent processing complete. Case: CASE-APP001-20260621034940
+[INFO    ] [2026-06-21 09:29:39,470] [agents.compliance_agent] - [APP001] Compliance Agent starting compliance processing for APPROVED
+[INFO    ] [2026-06-21 09:29:44,347] [agents.compliance_agent] - [APP001] Extracted JSON from markdown code block
+[INFO    ] [2026-06-21 09:29:44,347] [agents.compliance_agent] - [APP001] Compliance Agent processing complete. Case: CASE-APP001-20260621035939
+[INFO    ] [2026-06-21 09:37:39,024] [agents.compliance_agent] - [APP1782014827] Compliance Agent starting compliance processing for MANUAL_REVIEW
+[INFO    ] [2026-06-21 09:37:43,601] [agents.compliance_agent] - [APP1782014827] Extracted JSON from markdown code block
+[INFO    ] [2026-06-21 09:37:43,601] [agents.compliance_agent] - [APP1782014827] Compliance Agent processing complete. Case: CASE-APP1782014827-20260621040739
+[INFO    ] [2026-06-21 09:52:49,277] [agents.compliance_agent] - [APP1782015738] Compliance Agent starting compliance processing for MANUAL_REVIEW
+[INFO    ] [2026-06-21 09:52:53,272] [agents.compliance_agent] - [APP1782015738] Extracted JSON from markdown code block
+[INFO    ] [2026-06-21 09:52:53,272] [agents.compliance_agent] - [APP1782015738] Compliance Agent processing complete. Case: CASE-APP1782015738-20260621042249
+[INFO    ] [2026-06-21 10:01:08,981] [agents.compliance_agent] - [APP] Compliance Agent starting compliance processing for APPROVED
+[INFO    ] [2026-06-21 10:01:13,202] [agents.compliance_agent] - [APP] Extracted JSON from markdown code block
+[INFO    ] [2026-06-21 10:01:13,202] [agents.compliance_agent] - [APP] Compliance Agent processing complete. Case: CASE-APP-20260621043108

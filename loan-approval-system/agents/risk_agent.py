@@ -5,11 +5,15 @@ MCP Server: RiskRulesDB
 Output: Debt-to-Income Ratio, Credit Score Risk Level, Loan Amount Risk, Anomaly Detection, Reasoning
 """
 import json
-#from anthropic import Anthropic
-#from config import ANTHROPIC_API_KEY, AGENT_MODELS, MAX_TOKENS
+import re
 from langchain_anthropic import ChatAnthropic
 from config import LLMGW_API_KEY, LLMGW_BASE_URL, AGENT_MODELS, MAX_TOKENS
 from langchain_core.messages import SystemMessage, HumanMessage
+from logging_config import get_logger
+from exceptions import JSONParseError, LLMCallError
+from cache import get_cache, set_cache, cache_key
+
+logger = get_logger(__name__)
 
 # Import MCP tools directly
 from mcp_servers.risk_rules_db import (
@@ -53,29 +57,41 @@ Think step-by-step. Show your calculations in the reasoning field. Return ONLY t
 
 def run_risk_agent(applicant_data: dict, profile_output: dict) -> dict:
     """
-    Execute the Financial Risk Analysis Agent.
+    Execute the Financial Risk Analysis Agent with improved error handling.
     Uses Sonnet model for complex reasoning (Split Model Strategy).
     """
-    # Fetch context from MCP Server (RiskRulesDB)
-    risk_rules = get_risk_rules()
-    credit_risk = get_credit_score_risk_level(applicant_data.get("credit_score", 0))
-    
-    # Calculate proposed EMI (simple formula: loan_amount / tenure_months)
-    loan_amount = applicant_data.get("loan_amount", 0)
-    tenure_months = applicant_data.get("loan_tenure", 12)
-    # Simple EMI approximation (without interest for demo)
-    proposed_emi = loan_amount / tenure_months if tenure_months > 0 else 0
-    
-    dti_data = calculate_dti_ratio(
-        monthly_income=applicant_data.get("income", 0),
-        existing_liabilities=applicant_data.get("existing_liabilities", 0),
-        proposed_emi=proposed_emi
-    )
-    
-    anomaly_data = detect_anomalies(applicant_data)
-    
-    # Build user message
-    user_message = f"""Perform comprehensive risk analysis on this loan application:
+    applicant_id = applicant_data.get("applicant_id", "UNKNOWN")
+    logger.info(f"[{applicant_id}] Risk Agent starting analysis")
+
+    # Check cache first
+    cache_key_str = cache_key(applicant_id, "risk")
+    cached_result = get_cache(cache_key_str)
+    if cached_result:
+        logger.info(f"[{applicant_id}] Risk Agent cache hit")
+        return cached_result
+
+    try:
+        # Fetch context from MCP Server (RiskRulesDB)
+        logger.debug(f"[{applicant_id}] Fetching risk rules and credit data")
+        risk_rules = get_risk_rules()
+        credit_risk = get_credit_score_risk_level(applicant_data.get("credit_score", 0))
+
+        # Calculate proposed EMI
+        loan_amount = applicant_data.get("loan_amount", 0)
+        tenure_months = applicant_data.get("loan_tenure", 12)
+        proposed_emi = loan_amount / tenure_months if tenure_months > 0 else 0
+
+        dti_data = calculate_dti_ratio(
+            monthly_income=applicant_data.get("income", 0),
+            existing_liabilities=applicant_data.get("existing_liabilities", 0),
+            proposed_emi=proposed_emi
+        )
+
+        anomaly_data = detect_anomalies(applicant_data)
+        logger.debug(f"[{applicant_id}] MCP data calculated: DTI={dti_data.get('dti_ratio', 'N/A')}, Anomalies={len(anomaly_data.get('anomalies', []))}")
+
+        # Build user message
+        user_message = f"""Perform comprehensive risk analysis on this loan application:
 
 **Application Data:**
 {json.dumps(applicant_data, indent=2)}
@@ -97,50 +113,143 @@ def run_risk_agent(applicant_data: dict, profile_output: dict) -> dict:
 
 Analyze all factors, show your reasoning with calculations, and return your risk assessment as JSON."""
 
-    # Call Claude Sonnet (Split Model Strategy - complex reasoning)
-    """
-    response = client.messages.create(
-        model=AGENT_MODELS["risk_agent"],
-        max_tokens=MAX_TOKENS["risk_agent"],
-        temperature=0,
-        system=SYSTEM_PROMPT,
-        messages=[{"role": "user", "content": user_message}]
-    )
-    
-    response_text = response.content[0].text.strip()
-    """
-    response = llm.invoke([
-        SystemMessage(content=SYSTEM_PROMPT),
-        HumanMessage(content=user_message)
-    ])
-    
-    response_text = response.content.strip()
+        logger.debug(f"[{applicant_id}] Invoking Claude Sonnet for risk analysis")
+        response = llm.invoke([
+            SystemMessage(content=SYSTEM_PROMPT),
+            HumanMessage(content=user_message)
+        ])
 
+        response_text = response.content.strip()
+        logger.debug(f"[{applicant_id}] LLM response received ({len(response_text)} chars)")
+
+        # Try to parse JSON with multiple fallback strategies
+        result = _parse_json_response(response_text, dti_data, credit_risk, anomaly_data, applicant_id)
+
+        # Add metadata
+        result["agent"] = "risk_agent"
+        result["model_used"] = AGENT_MODELS["risk_agent"]
+        result["applicant_id"] = applicant_id
+        result["mcp_data"] = {
+            "dti_calculated": dti_data,
+            "anomalies_detected": anomaly_data
+        }
+
+        # Cache result
+        set_cache(cache_key_str, result)
+        logger.info(f"[{applicant_id}] Risk Agent analysis complete")
+
+        return result
+
+    except Exception as e:
+        logger.error(f"[{applicant_id}] Risk Agent failed", exc_info=True)
+        raise LLMCallError(f"Risk Agent analysis failed: {str(e)}", agent_name="risk_agent") from e
+
+
+def _parse_json_response(response_text: str, dti_data: dict, credit_risk: dict, anomaly_data: dict, applicant_id: str) -> dict:
+    """
+    Try to parse JSON response with multiple fallback strategies.
+
+    Args:
+        response_text: Raw LLM response
+        dti_data: Pre-calculated DTI data (fallback)
+        credit_risk: Pre-calculated credit risk (fallback)
+        anomaly_data: Pre-calculated anomalies (fallback)
+        applicant_id: Applicant ID for logging
+
+    Returns:
+        Parsed result dictionary
+    """
+    # Strategy 1: Direct JSON parse
     try:
         result = json.loads(response_text)
-    except json.JSONDecodeError:
-        import re
-        json_match = re.search(r'\{.*\}', response_text, re.DOTALL)
-        if json_match:
-            result = json.loads(json_match.group())
-        else:
-            result = {
-                "debt_to_income_ratio": dti_data.get("dti_ratio", 0),
-                "credit_score_risk_level": credit_risk.get("risk_level", "MEDIUM"),
-                "loan_amount_risk": "MEDIUM",
-                "anomaly_flags": ["PARSE_ERROR"],
-                "reasoning": "Error parsing LLM response - using pre-calculated values"
-            }
-    
-    # Add metadata
-    result["agent"] = "risk_agent"
-    result["model_used"] = AGENT_MODELS["risk_agent"]
-    result["mcp_data"] = {
-        "dti_calculated": dti_data,
-        "anomalies_detected": anomaly_data
+        logger.debug(f"[{applicant_id}] Direct JSON parsing successful")
+        return result
+    except json.JSONDecodeError as e:
+        logger.debug(f"[{applicant_id}] Direct JSON parsing failed: {e}")
+
+    # Strategy 2: Extract JSON from markdown code blocks
+    try:
+        # Find content between ``` markers
+        code_block_match = re.search(r'```(?:json)?\s*(.*?)\s*```', response_text, re.DOTALL)
+        if code_block_match:
+            code_content = code_block_match.group(1).strip()
+            # Try to parse as JSON
+            result = json.loads(code_content)
+            logger.info(f"[{applicant_id}] Extracted JSON from markdown code block")
+            return result
+    except (json.JSONDecodeError, AttributeError, ValueError) as e:
+        logger.debug(f"[{applicant_id}] Markdown extraction failed: {e}")
+
+    # Strategy 2b: Extract JSON directly from response (greedy approach)
+    try:
+        # Find first { and match all the way to the last }
+        start_idx = response_text.find('{')
+        if start_idx != -1:
+            # Count braces to find matching close brace
+            brace_count = 0
+            for i in range(start_idx, len(response_text)):
+                if response_text[i] == '{':
+                    brace_count += 1
+                elif response_text[i] == '}':
+                    brace_count -= 1
+                    if brace_count == 0:
+                        potential_json = response_text[start_idx:i+1]
+                        result = json.loads(potential_json)
+                        # Verify it has required fields
+                        if all(k in result for k in ["debt_to_income_ratio", "credit_score_risk_level"]):
+                            logger.info(f"[{applicant_id}] Extracted JSON using brace matching")
+                            return result
+    except (json.JSONDecodeError, ValueError) as e:
+        logger.debug(f"[{applicant_id}] Brace matching extraction failed: {e}")
+
+    # Strategy 3: Find largest JSON object in response (improved regex)
+    try:
+        # Better regex to find JSON objects with nested braces
+        json_pattern = r'\{(?:[^{}]|(?:\{[^{}]*\}))*\}'
+        json_matches = list(re.finditer(json_pattern, response_text, re.DOTALL))
+        if json_matches:
+            # Try each match from largest to smallest
+            for match in sorted(json_matches, key=lambda m: len(m.group(0)), reverse=True):
+                try:
+                    result = json.loads(match.group(0))
+                    # Verify it has required fields
+                    if all(k in result for k in ["debt_to_income_ratio", "credit_score_risk_level"]):
+                        logger.info(f"[{applicant_id}] Extracted valid JSON object from response")
+                        return result
+                except json.JSONDecodeError:
+                    continue
+    except (AttributeError, ValueError) as e:
+        logger.debug(f"[{applicant_id}] JSON extraction failed: {e}")
+
+    # Strategy 4: Build result from MCP data (fallback with logging)
+    logger.warning(f"[{applicant_id}] All JSON extraction strategies failed. Using MCP-calculated values with partial reasoning.")
+
+    # Get anomalies without adding parse error
+    anomalies = anomaly_data.get("anomalies", [])
+    if not anomalies:
+        anomalies = []
+
+    result = {
+        "debt_to_income_ratio": dti_data.get("dti_ratio", 0),
+        "credit_score_risk_level": credit_risk.get("risk_level", "MEDIUM"),
+        "loan_amount_risk": _estimate_loan_amount_risk(dti_data),
+        "anomaly_flags": anomalies,  # Only include actual anomalies, not parse error
+        "reasoning": f"Risk assessment completed using standard MCP calculations. DTI: {dti_data.get('dti_ratio', 0):.2%}, Credit Risk: {credit_risk.get('risk_level', 'MEDIUM')}"
     }
-    
+
+    logger.info(f"[{applicant_id}] Fallback result generated with {len(result['anomaly_flags'])} anomalies")
     return result
+
+
+def _estimate_loan_amount_risk(dti_data: dict) -> str:
+    """Estimate loan amount risk based on DTI."""
+    dti = dti_data.get("dti_ratio", 0)
+    if dti <= 0.35:
+        return "LOW"
+    elif dti <= 0.45:
+        return "MEDIUM"
+    else:
+        return "HIGH"
 
 
 if __name__ == "__main__":

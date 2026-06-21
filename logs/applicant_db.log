@@ -1,0 +1,6 @@
+[WARNING ] [2026-06-21 09:37:07,378] [mcp_servers.applicant_db] - Applicant APP1782014827 not found in MySQL database
+[WARNING ] [2026-06-21 09:37:07,381] [mcp_servers.applicant_db] - Credit history for APP1782014827 not found in MySQL
+[WARNING ] [2026-06-21 09:52:19,691] [mcp_servers.applicant_db] - Applicant APP1782015738 not found in MySQL database
+[WARNING ] [2026-06-21 09:52:19,695] [mcp_servers.applicant_db] - Credit history for APP1782015738 not found in MySQL
+[WARNING ] [2026-06-21 10:00:39,770] [mcp_servers.applicant_db] - Applicant APP not found in MySQL database
+[WARNING ] [2026-06-21 10:00:39,774] [mcp_servers.applicant_db] - Credit history for APP not found in MySQL

@@ -1,0 +1,29 @@
+[INFO    ] [2026-06-21 09:09:08,455] [agents.risk_agent] - [APP001] Risk Agent starting analysis
+[WARNING ] [2026-06-21 09:09:23,239] [agents.risk_agent] - [APP001] All JSON extraction strategies failed. Using MCP-calculated values with partial reasoning.
+[WARNING ] [2026-06-21 09:09:23,243] [agents.risk_agent] - [APP001] Using fallback result with 1 flags
+[INFO    ] [2026-06-21 09:09:23,243] [agents.risk_agent] - [APP001] Risk Agent analysis complete
+[INFO    ] [2026-06-21 09:16:09,492] [agents.risk_agent] - [APP001] Risk Agent starting analysis
+[WARNING ] [2026-06-21 09:16:24,412] [agents.risk_agent] - [APP001] All JSON extraction strategies failed. Using MCP-calculated values with partial reasoning.
+[WARNING ] [2026-06-21 09:16:24,412] [agents.risk_agent] - [APP001] Using fallback result with 1 flags
+[INFO    ] [2026-06-21 09:16:24,413] [agents.risk_agent] - [APP001] Risk Agent analysis complete
+[INFO    ] [2026-06-21 09:19:13,623] [agents.risk_agent] - [APP001] Risk Agent starting analysis
+[WARNING ] [2026-06-21 09:19:28,374] [agents.risk_agent] - [APP001] All JSON extraction strategies failed. Using MCP-calculated values with partial reasoning.
+[WARNING ] [2026-06-21 09:19:28,374] [agents.risk_agent] - [APP001] Using fallback result with 1 flags
+[INFO    ] [2026-06-21 09:19:28,374] [agents.risk_agent] - [APP001] Risk Agent analysis complete
+[INFO    ] [2026-06-21 09:28:36,306] [agents.risk_agent] - [APP001] Risk Agent starting analysis
+[INFO    ] [2026-06-21 09:29:12,943] [agents.risk_agent] - [APP001] Risk Agent starting analysis
+[WARNING ] [2026-06-21 09:29:28,494] [agents.risk_agent] - [APP001] All JSON extraction strategies failed. Using MCP-calculated values with partial reasoning.
+[INFO    ] [2026-06-21 09:29:28,494] [agents.risk_agent] - [APP001] Fallback result generated with 0 anomalies
+[INFO    ] [2026-06-21 09:29:28,498] [agents.risk_agent] - [APP001] Risk Agent analysis complete
+[INFO    ] [2026-06-21 09:37:09,939] [agents.risk_agent] - [APP1782014827] Risk Agent starting analysis
+[WARNING ] [2026-06-21 09:37:25,414] [agents.risk_agent] - [APP1782014827] All JSON extraction strategies failed. Using MCP-calculated values with partial reasoning.
+[WARNING ] [2026-06-21 09:37:25,414] [agents.risk_agent] - [APP1782014827] Using fallback result with 1 flags
+[INFO    ] [2026-06-21 09:37:25,415] [agents.risk_agent] - [APP1782014827] Risk Agent analysis complete
+[INFO    ] [2026-06-21 09:52:22,155] [agents.risk_agent] - [APP1782015738] Risk Agent starting analysis
+[WARNING ] [2026-06-21 09:52:37,930] [agents.risk_agent] - [APP1782015738] All JSON extraction strategies failed. Using MCP-calculated values with partial reasoning.
+[INFO    ] [2026-06-21 09:52:37,930] [agents.risk_agent] - [APP1782015738] Fallback result generated with 0 anomalies
+[INFO    ] [2026-06-21 09:52:37,931] [agents.risk_agent] - [APP1782015738] Risk Agent analysis complete
+[INFO    ] [2026-06-21 10:00:42,180] [agents.risk_agent] - [APP] Risk Agent starting analysis
+[WARNING ] [2026-06-21 10:00:56,898] [agents.risk_agent] - [APP] All JSON extraction strategies failed. Using MCP-calculated values with partial reasoning.
+[INFO    ] [2026-06-21 10:00:56,898] [agents.risk_agent] - [APP] Fallback result generated with 0 anomalies
+[INFO    ] [2026-06-21 10:00:56,899] [agents.risk_agent] - [APP] Risk Agent analysis complete

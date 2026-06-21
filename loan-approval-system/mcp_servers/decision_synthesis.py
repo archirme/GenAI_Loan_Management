@@ -1,15 +1,21 @@
 """
-MCP Server: DecisionSynthesis
+MCP Server: DecisionSynthesis with Input Validation and Logging
 Provides decision rules, precedents, and logging.
 Used by: Loan Decision Agent
 
-CHANGE: log_decision now persists to MySQL when DATA_SOURCE = "mysql"
+Features:
+- Input validation for all parameters
+- Logging of decision events
+- MySQL persistence when DATA_SOURCE = "mysql"
 """
 from fastmcp import FastMCP
 import json
 from datetime import datetime
-from config import DATA_SOURCE  # <-- NEW IMPORT
+from config import DATA_SOURCE
+from logging_config import get_logger
+from exceptions import ValidationError
 
+logger = get_logger(__name__)
 mcp = FastMCP("DecisionSynthesis")
 
 # Decision rules — UNCHANGED
@@ -86,7 +92,43 @@ def get_decision_precedents(credit_score_range: str = "all") -> list:
 @mcp.tool()
 def log_decision(applicant_id: str, classification: str, risk_score: float,
                  confidence: float, factors: list, explanation: str) -> dict:
-    """Log a loan decision for audit trail."""
+    """Log a loan decision for audit trail with validation."""
+    # Validate inputs
+    if not isinstance(applicant_id, str) or not applicant_id.strip():
+        logger.error("Decision logging validation failed: applicant_id must be non-empty string")
+        raise ValidationError("Applicant ID must be a non-empty string", field="applicant_id")
+
+    if classification not in ["APPROVED", "REJECTED", "MANUAL_REVIEW"]:
+        logger.error(f"Decision logging validation failed: invalid classification {classification}")
+        raise ValidationError("Classification must be APPROVED, REJECTED, or MANUAL_REVIEW",
+                            field="classification", value=classification)
+
+    if not isinstance(risk_score, (int, float)):
+        logger.error("Decision logging validation failed: risk_score must be numeric")
+        raise ValidationError("Risk score must be numeric", field="risk_score")
+
+    if not (0 <= risk_score <= 100):
+        logger.error(f"Decision logging validation failed: risk_score {risk_score} out of range")
+        raise ValidationError("Risk score must be between 0 and 100", field="risk_score", value=risk_score)
+
+    if not isinstance(confidence, (int, float)):
+        logger.error("Decision logging validation failed: confidence must be numeric")
+        raise ValidationError("Confidence must be numeric", field="confidence")
+
+    if not (0 <= confidence <= 100):
+        logger.error(f"Decision logging validation failed: confidence {confidence} out of range")
+        raise ValidationError("Confidence must be between 0 and 100", field="confidence", value=confidence)
+
+    if not isinstance(factors, list):
+        logger.error("Decision logging validation failed: factors must be list")
+        raise ValidationError("Factors must be a list", field="factors")
+
+    if not isinstance(explanation, str) or not explanation.strip():
+        logger.error("Decision logging validation failed: explanation must be non-empty string")
+        raise ValidationError("Explanation must be a non-empty string", field="explanation")
+
+    logger.info(f"Logging decision for {applicant_id}: {classification} (score={risk_score}, conf={confidence})")
+
     decision_id = f"DEC-{applicant_id}-{datetime.utcnow().strftime('%Y%m%d%H%M%S')}"
     record = {
         "applicant_id": applicant_id,
@@ -99,10 +141,11 @@ def log_decision(applicant_id: str, classification: str, risk_score: float,
         "decision_id": decision_id
     }
 
-    # Always keep in-memory log (existing behavior)
+    # Always keep in-memory log
     decision_log.append(record)
+    logger.debug(f"Decision logged to memory. Total decisions: {len(decision_log)}")
 
-    # --- NEW: Also persist to MySQL if enabled ---
+    # Persist to MySQL if enabled
     if DATA_SOURCE == "mysql":
         from database.db_connection import execute_query
         try:
@@ -113,9 +156,9 @@ def log_decision(applicant_id: str, classification: str, risk_score: float,
                 (decision_id, applicant_id, classification, risk_score,
                  confidence, json.dumps(factors), explanation)
             )
+            logger.info(f"Decision logged to MySQL database. Decision ID: {decision_id}")
         except Exception as e:
-            print(f"[WARNING] Failed to log decision to MySQL: {e}")
-    # --- END NEW ---
+            logger.warning(f"Failed to log decision to MySQL: {e}")
 
     return {"status": "logged", "decision_id": decision_id}
 

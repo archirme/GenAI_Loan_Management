@@ -1,0 +1,21 @@
+[INFO    ] [2026-06-21 09:09:23,261] [agents.decision_agent] - [APP001] Decision Agent starting decision synthesis
+[INFO    ] [2026-06-21 09:09:35,837] [agents.decision_agent] - [APP001] Extracted JSON from markdown code block
+[INFO    ] [2026-06-21 09:09:35,882] [agents.decision_agent] - [APP001] Decision Agent synthesis complete: APPROVED
+[INFO    ] [2026-06-21 09:16:24,414] [agents.decision_agent] - [APP001] Decision Agent starting decision synthesis
+[INFO    ] [2026-06-21 09:16:36,679] [agents.decision_agent] - [APP001] Extracted JSON from markdown code block
+[INFO    ] [2026-06-21 09:16:36,691] [agents.decision_agent] - [APP001] Decision Agent synthesis complete: APPROVED
+[INFO    ] [2026-06-21 09:19:28,376] [agents.decision_agent] - [APP001] Decision Agent starting decision synthesis
+[INFO    ] [2026-06-21 09:19:40,651] [agents.decision_agent] - [APP001] Extracted JSON from markdown code block
+[INFO    ] [2026-06-21 09:19:40,662] [agents.decision_agent] - [APP001] Decision Agent synthesis complete: APPROVED
+[INFO    ] [2026-06-21 09:29:28,504] [agents.decision_agent] - [APP001] Decision Agent starting decision synthesis
+[INFO    ] [2026-06-21 09:29:39,415] [agents.decision_agent] - [APP001] Extracted JSON from markdown code block
+[INFO    ] [2026-06-21 09:29:39,459] [agents.decision_agent] - [APP001] Decision Agent synthesis complete: APPROVED
+[INFO    ] [2026-06-21 09:37:25,416] [agents.decision_agent] - [APP1782014827] Decision Agent starting decision synthesis
+[INFO    ] [2026-06-21 09:37:39,009] [agents.decision_agent] - [APP1782014827] Extracted JSON from markdown code block
+[INFO    ] [2026-06-21 09:37:39,022] [agents.decision_agent] - [APP1782014827] Decision Agent synthesis complete: MANUAL_REVIEW
+[INFO    ] [2026-06-21 09:52:37,932] [agents.decision_agent] - [APP1782015738] Decision Agent starting decision synthesis
+[INFO    ] [2026-06-21 09:52:49,263] [agents.decision_agent] - [APP1782015738] Extracted JSON from markdown code block
+[INFO    ] [2026-06-21 09:52:49,276] [agents.decision_agent] - [APP1782015738] Decision Agent synthesis complete: MANUAL_REVIEW
+[INFO    ] [2026-06-21 10:00:56,900] [agents.decision_agent] - [APP] Decision Agent starting decision synthesis
+[INFO    ] [2026-06-21 10:01:08,967] [agents.decision_agent] - [APP] Extracted JSON from markdown code block
+[INFO    ] [2026-06-21 10:01:08,978] [agents.decision_agent] - [APP] Decision Agent synthesis complete: APPROVED
