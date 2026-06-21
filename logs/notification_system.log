@@ -26,3 +26,11 @@
 [INFO    ] [2026-06-21 10:01:08,994] [mcp_servers.notification_system] - Case persisted to MySQL: CASE-APP-20260621043108
 [INFO    ] [2026-06-21 10:01:08,994] [mcp_servers.notification_system] - Sending LOAN_APPROVED notification to APP via email
 [INFO    ] [2026-06-21 10:01:09,003] [mcp_servers.notification_system] - Notification persisted to MySQL: NOTIF-APP-20260621043108
+[INFO    ] [2026-06-21 11:19:35,148] [mcp_servers.notification_system] - Creating case for APP001 with priority NORMAL for APPROVED
+[INFO    ] [2026-06-21 11:19:35,161] [mcp_servers.notification_system] - Case persisted to MySQL: CASE-APP001-20260621054935
+[INFO    ] [2026-06-21 11:19:35,162] [mcp_servers.notification_system] - Sending LOAN_APPROVED notification to APP001 via email
+[INFO    ] [2026-06-21 11:19:35,172] [mcp_servers.notification_system] - Notification persisted to MySQL: NOTIF-APP001-20260621054935
+[INFO    ] [2026-06-21 11:23:15,630] [mcp_servers.notification_system] - Creating case for APP003 with priority NORMAL for APPROVED
+[INFO    ] [2026-06-21 11:23:15,642] [mcp_servers.notification_system] - Case persisted to MySQL: CASE-APP003-20260621055315
+[INFO    ] [2026-06-21 11:23:15,642] [mcp_servers.notification_system] - Sending LOAN_APPROVED notification to APP003 via email
+[INFO    ] [2026-06-21 11:23:15,652] [mcp_servers.notification_system] - Notification persisted to MySQL: NOTIF-APP003-20260621055315

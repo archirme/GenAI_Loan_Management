@@ -27,3 +27,11 @@
 [WARNING ] [2026-06-21 10:00:56,898] [agents.risk_agent] - [APP] All JSON extraction strategies failed. Using MCP-calculated values with partial reasoning.
 [INFO    ] [2026-06-21 10:00:56,898] [agents.risk_agent] - [APP] Fallback result generated with 0 anomalies
 [INFO    ] [2026-06-21 10:00:56,899] [agents.risk_agent] - [APP] Risk Agent analysis complete
+[INFO    ] [2026-06-21 11:19:09,971] [agents.risk_agent] - [APP001] Risk Agent starting analysis
+[WARNING ] [2026-06-21 11:19:25,043] [agents.risk_agent] - [APP001] All JSON extraction strategies failed. Using MCP-calculated values with partial reasoning.
+[INFO    ] [2026-06-21 11:19:25,043] [agents.risk_agent] - [APP001] Fallback result generated with 0 anomalies
+[INFO    ] [2026-06-21 11:19:25,044] [agents.risk_agent] - [APP001] Risk Agent analysis complete
+[INFO    ] [2026-06-21 11:22:49,468] [agents.risk_agent] - [APP003] Risk Agent starting analysis
+[WARNING ] [2026-06-21 11:23:05,832] [agents.risk_agent] - [APP003] All JSON extraction strategies failed. Using MCP-calculated values with partial reasoning.
+[INFO    ] [2026-06-21 11:23:05,833] [agents.risk_agent] - [APP003] Fallback result generated with 0 anomalies
+[INFO    ] [2026-06-21 11:23:05,833] [agents.risk_agent] - [APP003] Risk Agent analysis complete

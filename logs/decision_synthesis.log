@@ -12,3 +12,7 @@
 [INFO    ] [2026-06-21 09:52:49,276] [mcp_servers.decision_synthesis] - Decision logged to MySQL database. Decision ID: DEC-APP1782015738-20260621042249
 [INFO    ] [2026-06-21 10:01:08,968] [mcp_servers.decision_synthesis] - Logging decision for APP: APPROVED (score=18, conf=82)
 [INFO    ] [2026-06-21 10:01:08,978] [mcp_servers.decision_synthesis] - Decision logged to MySQL database. Decision ID: DEC-APP-20260621043108
+[INFO    ] [2026-06-21 11:19:35,130] [mcp_servers.decision_synthesis] - Logging decision for APP001: APPROVED (score=18, conf=92)
+[INFO    ] [2026-06-21 11:19:35,143] [mcp_servers.decision_synthesis] - Decision logged to MySQL database. Decision ID: DEC-APP001-20260621054935
+[INFO    ] [2026-06-21 11:23:15,618] [mcp_servers.decision_synthesis] - Logging decision for APP003: APPROVED (score=12, conf=96)
+[INFO    ] [2026-06-21 11:23:15,627] [mcp_servers.decision_synthesis] - Decision logged to MySQL database. Decision ID: DEC-APP003-20260621055315

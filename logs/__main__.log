@@ -41,3 +41,15 @@
 [INFO    ] [2026-06-21 09:29:44,356] [__main__] - [APP001] Aggregating workflow results
 [INFO    ] [2026-06-21 09:29:44,356] [__main__] - [APP001] Workflow completed successfully
 [INFO    ] [2026-06-21 09:29:44,357] [__main__] - [APP001] Loan approval workflow completed with decision: APPROVED
+[INFO    ] [2026-06-21 11:19:07,633] [__main__] - [APP001] Loan approval workflow starting
+[INFO    ] [2026-06-21 11:19:07,654] [__main__] - [APP001] Profile Agent (Haiku) - Starting profile analysis
+[INFO    ] [2026-06-21 11:19:09,969] [__main__] - [APP001] Profile Agent completed successfully
+[INFO    ] [2026-06-21 11:19:09,970] [__main__] - [APP001] Risk Agent (Sonnet) - Starting risk analysis
+[INFO    ] [2026-06-21 11:19:25,044] [__main__] - [APP001] Risk Agent completed successfully
+[INFO    ] [2026-06-21 11:19:25,045] [__main__] - [APP001] Decision Agent (Sonnet) - Making decision
+[INFO    ] [2026-06-21 11:19:35,143] [__main__] - [APP001] Decision Agent completed: APPROVED
+[INFO    ] [2026-06-21 11:19:35,145] [__main__] - [APP001] Compliance Agent (Haiku) - Processing compliance
+[INFO    ] [2026-06-21 11:19:39,158] [__main__] - [APP001] Compliance Agent completed: Loan application APP001 approved for ₹500,000 with 60-month tenure. Approval letter generated, disbursement process initiated, credit bureau update scheduled, and loan account created. All compliance actions completed within SLA.
+[INFO    ] [2026-06-21 11:19:39,161] [__main__] - [APP001] Aggregating workflow results
+[INFO    ] [2026-06-21 11:19:39,161] [__main__] - [APP001] Workflow completed successfully
+[INFO    ] [2026-06-21 11:19:39,162] [__main__] - [APP001] Loan approval workflow completed with decision: APPROVED

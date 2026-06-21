@@ -55,3 +55,15 @@
 [INFO    ] [2026-06-21 10:01:13,203] [orchestrator.graph] - [APP] Aggregating workflow results
 [INFO    ] [2026-06-21 10:01:13,204] [orchestrator.graph] - [APP] Workflow completed successfully
 [INFO    ] [2026-06-21 10:01:13,204] [orchestrator.graph] - [APP] Loan approval workflow completed with decision: APPROVED
+[INFO    ] [2026-06-21 11:22:47,789] [orchestrator.graph] - [APP003] Loan approval workflow starting
+[INFO    ] [2026-06-21 11:22:47,809] [orchestrator.graph] - [APP003] Profile Agent (Haiku) - Starting profile analysis
+[INFO    ] [2026-06-21 11:22:49,463] [orchestrator.graph] - [APP003] Profile Agent completed successfully
+[INFO    ] [2026-06-21 11:22:49,465] [orchestrator.graph] - [APP003] Risk Agent (Sonnet) - Starting risk analysis
+[INFO    ] [2026-06-21 11:23:05,833] [orchestrator.graph] - [APP003] Risk Agent completed successfully
+[INFO    ] [2026-06-21 11:23:05,834] [orchestrator.graph] - [APP003] Decision Agent (Sonnet) - Making decision
+[INFO    ] [2026-06-21 11:23:15,627] [orchestrator.graph] - [APP003] Decision Agent completed: APPROVED
+[INFO    ] [2026-06-21 11:23:15,629] [orchestrator.graph] - [APP003] Compliance Agent (Haiku) - Processing compliance
+[INFO    ] [2026-06-21 11:23:19,531] [orchestrator.graph] - [APP003] Compliance Agent completed: Loan application APP003 APPROVED for ₹500,000 over 60-month tenure. Approval letter generated, disbursement process initiated, loan account created, and credit bureau updated per compliance checklist.
+[INFO    ] [2026-06-21 11:23:19,532] [orchestrator.graph] - [APP003] Aggregating workflow results
+[INFO    ] [2026-06-21 11:23:19,532] [orchestrator.graph] - [APP003] Workflow completed successfully
+[INFO    ] [2026-06-21 11:23:19,532] [orchestrator.graph] - [APP003] Loan approval workflow completed with decision: APPROVED

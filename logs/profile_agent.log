@@ -22,3 +22,9 @@
 [INFO    ] [2026-06-21 10:00:39,763] [agents.profile_agent] - [APP] Profile Agent starting analysis
 [INFO    ] [2026-06-21 10:00:42,179] [agents.profile_agent] - [APP] Extracted JSON from markdown code block
 [INFO    ] [2026-06-21 10:00:42,179] [agents.profile_agent] - [APP] Profile Agent analysis complete
+[INFO    ] [2026-06-21 11:19:07,654] [agents.profile_agent] - [APP001] Profile Agent starting analysis
+[INFO    ] [2026-06-21 11:19:09,968] [agents.profile_agent] - [APP001] Extracted JSON from markdown code block
+[INFO    ] [2026-06-21 11:19:09,969] [agents.profile_agent] - [APP001] Profile Agent analysis complete
+[INFO    ] [2026-06-21 11:22:47,809] [agents.profile_agent] - [APP003] Profile Agent starting analysis
+[INFO    ] [2026-06-21 11:22:49,463] [agents.profile_agent] - [APP003] Extracted JSON from markdown code block
+[INFO    ] [2026-06-21 11:22:49,463] [agents.profile_agent] - [APP003] Profile Agent analysis complete

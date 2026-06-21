@@ -19,3 +19,9 @@
 [INFO    ] [2026-06-21 10:00:56,900] [agents.decision_agent] - [APP] Decision Agent starting decision synthesis
 [INFO    ] [2026-06-21 10:01:08,967] [agents.decision_agent] - [APP] Extracted JSON from markdown code block
 [INFO    ] [2026-06-21 10:01:08,978] [agents.decision_agent] - [APP] Decision Agent synthesis complete: APPROVED
+[INFO    ] [2026-06-21 11:19:25,046] [agents.decision_agent] - [APP001] Decision Agent starting decision synthesis
+[INFO    ] [2026-06-21 11:19:35,129] [agents.decision_agent] - [APP001] Extracted JSON from markdown code block
+[INFO    ] [2026-06-21 11:19:35,143] [agents.decision_agent] - [APP001] Decision Agent synthesis complete: APPROVED
+[INFO    ] [2026-06-21 11:23:05,834] [agents.decision_agent] - [APP003] Decision Agent starting decision synthesis
+[INFO    ] [2026-06-21 11:23:15,617] [agents.decision_agent] - [APP003] Extracted JSON from markdown code block
+[INFO    ] [2026-06-21 11:23:15,627] [agents.decision_agent] - [APP003] Decision Agent synthesis complete: APPROVED
